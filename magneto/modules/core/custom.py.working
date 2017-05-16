@@ -1,0 +1,60 @@
+from dragonfly import (
+    Choice,
+    Function,
+    Playback,
+    )
+
+import aenea
+import aenea.misc
+import aenea.vocabulary
+import aenea.configuration
+import aenea.format
+
+from aenea import (
+    AeneaContext,
+    AppContext,
+    Alternative,
+    CompoundRule,
+    Dictation,
+    DictList,
+    DictListRef,
+    Grammar,
+    IntegerRef,
+    Key,
+    Literal,
+    ProxyAppContext,
+    MappingRule,
+    NeverContext,
+    Repetition,
+    Repeat,
+    RuleRef,
+    Sequence,
+    Text
+    )
+
+from magneto.nexus import nexus
+from magneto.mergerule import MergeRule
+from magneto import settings
+from magneto.settings import ModuleDictionary
+
+print('loading custom rules')
+
+try:
+    import aenea.communications
+except ImportError:
+    print 'Unable to import Aenea client-side modules.'
+    raise
+
+dictionary = ModuleDictionary("core\\custom")
+
+
+class Custom(MergeRule):
+    mapping = {key: Text(value) for key,value in dictionary}
+
+    extras = [
+    ]
+
+    defaults = {
+    }
+
+nexus().merger.add_global_rule(Custom())
